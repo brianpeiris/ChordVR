@@ -2,6 +2,7 @@ import socketserver
 import threading
 import time
 import sys
+from pywinauto.keyboard import SendKeys
 
 class ButtonState():
     left_val = 0
@@ -36,14 +37,30 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
 
 button_state_to_key_index = [
-    None, 1, 2, 15, 3, None, 19, 28, 4, None, None, 16, None, None, 20, None, 5, None, None, 17, None, None, 21, 
-    None, 7, 8, 9, None, 10, None, None, None, 6, None, None, 18, None, None, 22, None, 23, 24, 25, None, 26, None, 
-    None, None, 11, 12, 13, None, 14, None, None, None, 27
+    0, 1, 2, 15, 3, 27, 19, 46, 4, 42, 36, 16, 33, 28, 20, 47, 5, 35, 59, 17, 32, 29, 21, 48, 7, 8, 9, 44, 10, 41, 38,
+    56, 6, 34, 31, 18, 43, 30, 22, 49, 23, 24, 25, 58, 26, 60, 40, 62, 11, 12, 13, 37, 14, 39, 45, 63, 50, 51, 52, 54,
+    53, 55, 57, 61
 ]
-
-keys = [
-    None, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 
-    'v', 'w', 'x', 'y', 'z', ' ', '\b \b'
+normal_keys = [
+    "NULL", "a", "b", "c", "d","e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", 
+    "v", "w", "x", "y", "z", "th", "that ", "the ", "of ", 
+    ".", ",", "!", "?", "-", "\'", "\\", "/", "and ", "§", "to ", 
+    "{UP}", "{DOWN}", "{PGUP}", "{PGDN}", "{BACKSPACE}", "{LEFT}", "^{LEFT}", "{HOME}", "{SPACE}", "{RIGHT}", "^{RIGHT}", "{END}", 
+    "{ENTER}", "{TAB}", "{ESC}", "{DEL}", "{INS}", "_SHIFT_", "_SYMBOL_", None, "{VK_CONTROL}", "{VK_MENU}" 
+]
+shift_keys = [
+    "NULL", "A", "B", "C", "D","E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", 
+    "V", "W", "X", "Y", "Z", "Th", "That ", "The ", "Of ", 
+    ":", ";", "|", "{~}", "_", "\"", "`", "/", "And ", "§", "To ",
+    "{UP}", "{DOWN}", "{PGUP}", "{PGDN}", "{BACKSPACE}", "{LEFT}", "^{LEFT}", "{HOME}", "{SPACE}", "{RIGHT}", "^{RIGHT}", "{END}", 
+    "{ENTER}", "{TAB}", "{ESC}", "{DEL}", "{INS}", "_NORMAL_", "_SYMBOL_", None, "{VK_CONTROL}", "{VK_MENU}" 
+]
+symbol_keys = [
+    "NULL", "1", "2", "3", "4","5", "6", "0", "7", "8", "9", "#", "@", "½", "&", "{+}", "{%}", "=", "{^}", "*", "$", "€", 
+    "£", "{(}", "[", "<", "{{}", "{)}", "]", ">", "{}}", 
+    ":", ";", "|", "{~}", "_", "\"", "`", "´", "μ", "§", "", 
+    "{UP}", "{DOWN}", "{PGUP}", "{PGDN}", "{BACKSPACE}", "{LEFT}", "^{LEFT}", "{HOME}", "{SPACE}", "{RIGHT}", "^{RIGHT}", "{END}", 
+    "{ENTER}", "{TAB}", "{ESC}", "{DEL}", "{INS}", "_SHIFT_", "_NORMAL_", None, "{VK_CONTROL}", "{VK_MENU}" 
 ]
 
 if __name__ == "__main__":
@@ -55,6 +72,7 @@ if __name__ == "__main__":
     last_time = 0
     last_val = 0
     last_key = None
+    mode = '_NORMAL_'
     while(True):
         val = ButtonState.val
         now = time.clock() * 1000
@@ -65,18 +83,28 @@ if __name__ == "__main__":
 
         if val == 0:
             if last_key is not None:
-                print(last_key, end='')
-                sys.stdout.flush()
-                last_key = None
-                last_val = 0
+                if len(last_key) > 1 and last_key[0] == '_':
+                    mode = last_key
+                    print(mode, end='')
+                else:
+                    print(last_key, end='')
+                    SendKeys(last_key)
+                    sys.stdout.flush()
+            last_key = None
+            last_val = 0
             continue
 
         if val <= last_val:
             continue
 
-        if val in button_state_to_key_index and button_state_to_key_index[val] in keys:
-            key = keys[button_state_to_key_index[val]]
-        else:
+        try:
+            if mode == '_NORMAL_':
+                key = normal_keys[button_state_to_key_index[val]]
+            elif mode == '_SHIFT_':
+                key = shift_keys[button_state_to_key_index[val]]
+            else:
+                key = symbol_keys[button_state_to_key_index[val]]
+        except (IndexError, TypeError):
             key = None
 
         debug('key', key);
