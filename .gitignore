@@ -1,3 +1,4 @@
 *.FCStd1
 *.blend1
 env/
+node_modules
