@@ -4,7 +4,9 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "lodash.curry": "^4.1.1",
     "noble": "^1.8.1",
-    "noble-uwp": "0.3.2"
+    "noble-uwp": "0.3.2",
+    "robotjs": "^0.4.7"
   }
 }
