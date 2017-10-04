@@ -20,7 +20,7 @@ void setup()
   Bluefruit.autoConnLed(false);
 
   Bluefruit.begin();
-  Bluefruit.setName("chordvr right");
+  Bluefruit.setName("chordvr left");
   Bluefruit.setConnInterval(2, 8);
 
   bleUart.begin();
@@ -34,7 +34,7 @@ void setup()
 
 byte val;
 byte lastVal; 
-int debounce = 20;
+int debounce = 50;
 int lastDebounce;
 void loop()
 {

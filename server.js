@@ -23,6 +23,7 @@ var chordToKeyIndex = [
   56, 6, 34, 31, 18, 43, 30, 22, 49, 23, 24, 25, 58, 26, 60, 40, 62, 11, 12, 13, 37, 14, 39, 45, 63, 50, 51, 52, 54,
   53, 55, 57, 61
 ];
+
 var normalKeys = [
   "NULL", "a", "b", "c", "d","e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", 
   "v", "w", "x", "y", "z", "th", "that ", "the ", "of ", 
@@ -35,36 +36,54 @@ var shiftKeys = [
   "V", "W", "X", "Y", "Z", "Th", "That ", "The ", "Of ", 
   ":", ";", "|", "~", "_", "\"", "`", "/", "And ", null, "To ",
   "up", "down", "pageup", "pagedown", "backspace", "left", "^left", "home", "space", "right", "^right", "end", 
-  "enter", "tab", "escape", "delete", "insert", "_NORMAL_", "_SYMBOL_", null, "control", "command" 
+  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_SYMBOL_", null, "control", "command" 
 ];
 var symbolKeys = [
   "NULL", "1", "2", "3", "4","5", "6", "0", "7", "8", "9", "#", "@", null, "&", "+", "%", "=", "^", "*", "$", null, 
   null, "(", "[", "<", "{", ")", "]", ">", "}", 
   ":", ";", "|", "~", "_", "\"", "`", null, null, null, null, 
   "up", "down", "pageup", "pagedown", "backspace", "left", "^left", "home", "space", "right", "^right", "end", 
-  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_NORMAL_", null, "control", "command" 
+  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_SYMBOL_", null, "control", "command" 
 ];
 
 var lastChord = 0;
 var lastKey = null;
 var lastIndex = null;
 var mode = '_NORMAL_';
+var sticky = false;
 function processChord(chord) {
   if (chord === 0) {
     if (lastKey !== null) {
       if (lastKey.length > 1 && lastKey[0] === '_') {
-        mode = lastKey;
+        if (mode === lastKey) {
+          if (sticky) {
+            mode = '_NORMAL_';
+            sticky = false;
+          }
+          else {
+            sticky = true;
+          }
+        }
+        else {
+          mode = lastKey;
+        }
         process.stdout.write(mode + ' ');
       }
       else {
         process.stdout.write(lastKey + ' ');
-        if (mode === '_SHIFT_' && lastIndex < 41) {
+        // everything from the 41st index and above are control commands.
+        if (mode === '_SHIFT_' && lastIndex <= 41) {
           robot.keyTap(lastKey, 'shift');
+        }
+        else if (lastIndex <= 41) {
+          robot.typeString(lastKey);
         }
         else {
           robot.keyTap(lastKey);
         }
-        mode = '_NORMAL_';
+        if (!sticky) {
+          mode = '_NORMAL_';
+        }
       }
       // sys.stdout.flush();
     }
@@ -120,7 +139,6 @@ function scanCharacteristics(hand, error, services, characteristics) {
 console.log('scanning');
 noble.on('discover', function(peripheral) {
   var name = peripheral.advertisement.localName;
-  console.log('found', name);
   if (!/chordvr/.test(name)) { return; }
 
   var hand = peripheral.advertisement.localName.split(' ')[1];
