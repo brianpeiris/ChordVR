@@ -1,4 +1,3 @@
-var UART_SERVICE_UUID = '6E400001-B5A3-F393-E0A9-E50E24DCCA9E';
 var RX_CHAR_UUID = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
 
 var noble = require('noble-uwp');
@@ -25,25 +24,25 @@ var chordToKeyIndex = [
 ];
 
 var normalKeys = [
-  "NULL", "a", "b", "c", "d","e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", 
-  "v", "w", "x", "y", "z", "th", "that ", "the ", "of ", 
-  ".", ",", "!", "?", "-", "'", "\\", "/", "and ", null, "to ", 
-  "up", "down", "pageup", "pagedown", "backspace", "left", "^left", "home", "space", "right", "^right", "end", 
-  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_SYMBOL_", null, "control", "command" 
+  "NULL", "a", "b", "c", "d","e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
+  "v", "w", "x", "y", "z", "th", "that ", "the ", "of ",
+  ".", ",", "!", "?", "-", "'", "\\", "/", "and ", null, "to ",
+  "up", "down", "pageup", "pagedown", "backspace", "left", "^left", "home", "space", "right", "^right", "end",
+  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_SYMBOL_", null, "control", "command"
 ];
 var shiftKeys = [
-  "NULL", "A", "B", "C", "D","E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", 
-  "V", "W", "X", "Y", "Z", "Th", "That ", "The ", "Of ", 
+  "NULL", "A", "B", "C", "D","E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
+  "V", "W", "X", "Y", "Z", "Th", "That ", "The ", "Of ",
   ":", ";", "|", "~", "_", "\"", "`", "/", "And ", null, "To ",
-  "up", "down", "pageup", "pagedown", "backspace", "left", "^left", "home", "space", "right", "^right", "end", 
-  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_SYMBOL_", null, "control", "command" 
+  "up", "down", "pageup", "pagedown", "backspace", "left", "^left", "home", "space", "right", "^right", "end",
+  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_SYMBOL_", null, "control", "command"
 ];
 var symbolKeys = [
-  "NULL", "1", "2", "3", "4","5", "6", "0", "7", "8", "9", "#", "@", null, "&", "+", "%", "=", "^", "*", "$", null, 
-  null, "(", "[", "<", "{", ")", "]", ">", "}", 
-  ":", ";", "|", "~", "_", "\"", "`", null, null, null, null, 
-  "up", "down", "pageup", "pagedown", "backspace", "left", "^left", "home", "space", "right", "^right", "end", 
-  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_SYMBOL_", null, "control", "command" 
+  "NULL", "1", "2", "3", "4","5", "6", "0", "7", "8", "9", "#", "@", null, "&", "+", "%", "=", "^", "*", "$", null,
+  null, "(", "[", "<", "{", ")", "]", ">", "}",
+  ":", ";", "|", "~", "_", "\"", "`", null, null, null, null,
+  "up", "down", "pageup", "pagedown", "backspace", "left", "^left", "home", "space", "right", "^right", "end",
+  "enter", "tab", "escape", "delete", "insert", "_SHIFT_", "_SYMBOL_", null, "control", "command"
 ];
 
 var lastChord = 0;
