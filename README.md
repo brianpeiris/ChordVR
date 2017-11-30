@@ -2,8 +2,10 @@
 
 A [chorded keyboard](https://en.wikipedia.org/wiki/Chorded_keyboard) for VR.
 
+![A photo of the completed chorded keyboard hardware, a screenshot of the hardware model in Autodesk Fusion 360 and a photo of the Adafruit Feather nRF52 Bluefruit microcontroller](images/combined.jpg)
+
 The current iteration of this project uses Adafruit's
-(Feather nRF52 Bluefruit microcontroller](https://www.adafruit.com/product/3406) and is designed to work with Vive
+[Feather nRF52 Bluefruit microcontroller](https://www.adafruit.com/product/3406) and is designed to work with Vive
 controllers. The keyboard uses Cherry MX (or compatible) mechanical keys with
 [The Enabler](https://techkeys.us/collections/accessories/products/the-enabler) single switch PCB.
 
@@ -11,13 +13,13 @@ The software implements the [GKOS system](http://gkos.com/gkos/page1.html) for c
 
 ## File Structure
 
-- code/gkos-bluefruit/gkos-bluefruit.ino
+- `code/gkos-bluefruit/gkos-bluefruit.ino`  
 	Arduino code that's uploaded to the Feather nRF52s. Takes care of setting up the bluetooth peripheral and sending
 	keypress data via BLE UART.
-- code/server/server.js
+- `code/server/server.js`  
 	Connects to the nRF52 boards, receives and translates the key presses into GKOS chords and emulates a keyboard
 	on the host machine.
-- models/src/ChordVR.f3d
+- `models/src/ChordVR.f3d`  
 	An Autodesk Fusion 360 model of the hardware sleeve designed to slip onto a Vive controller.
-- models/prints/*
-	STL files for 3D printing the hardware.
+- `models/prints/*.stl`  
+	STL files for individual pieces of the hardware, ready for 3D printing.
